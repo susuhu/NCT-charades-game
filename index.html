@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Charades Game</title>
+<title>NCT TSO Charades Game</title>
 
 <!-- Favicon / Tab Logo -->
 <link rel="icon" type="image/png" href="TSO_Logo.png" />
+<link rel="apple-touch-icon" href="TSO_Logo.png" sizes="180x180">
 
 <style>
   html, body {
@@ -28,6 +29,13 @@
       justify-content: center;
       align-items: center;
       flex-grow: 1;
+      padding: 10px;
+  }
+
+  h1 {
+      font-size: 8vw;
+      margin: 10px 0;
+      color: #007aff;
   }
 
   #round-timer {
@@ -48,17 +56,30 @@
       word-wrap: break-word;
   }
 
+  #buttons-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+  }
+
   .btn {
-      padding: 12px 20px;
-      margin: 10px 0;
+      padding: 2vh 0;
+      margin: 2vh 0;
       font-size: 5vw;
       cursor: pointer;
-      border-radius: 12px;
+      border-radius: 2vw;
       border: none;
       background-color: #007aff;
       color: white;
-      width: 80%;
+      width: 60vw;
       max-width: 300px;
+      transition: transform 0.1s;
+  }
+
+  .btn:active {
+      transform: scale(0.95);
   }
 
   .btn:disabled {
@@ -81,9 +102,10 @@
   }
 
   @media (min-width: 768px) {
+      h1 { font-size: 48px; }
       #round-timer { font-size: 48px; }
       #word { font-size: 64px; }
-      .btn { font-size: 24px; width: 250px; }
+      .btn { font-size: 24px; width: 250px; border-radius: 12px; }
       #footer { font-size: 18px; }
       #footer img { max-width: 200px; }
   }
@@ -92,14 +114,15 @@
 <body>
 
 <div id="game-area">
-  <h1 style="font-size:8vw; margin:20px 0; color:#007aff;">TSO: The Silly Olympics</h1>
-
+  <h1>TSO: The Silly Olympics</h1>
   <div id="round-timer">2:00</div>
   <div id="word"></div>
 
-  <button class="btn" id="startRoundBtn" onclick="startRound()">Start 2-Minute Round</button>
-  <button class="btn" id="nextWordBtn" onclick="nextWord()" disabled>Next Word</button>
-  <button class="btn" id="shuffleBtn" onclick="shuffleWords()">Shuffle Vocabulary</button>
+  <div id="buttons-container">
+      <button class="btn" id="startRoundBtn" onclick="startRound()">Start 2-Minute Round</button>
+      <button class="btn" id="nextWordBtn" onclick="nextWord()" disabled>Next Word</button>
+      <button class="btn" id="shuffleBtn" onclick="shuffleWords()">Shuffle Vocabulary</button>
+  </div>
 </div>
 
 <!-- Footer with bigger logo + funny statements -->
