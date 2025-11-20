@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>2025 NCT X'mas Dinner Charades Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 40px;
+        text-align: center;
+    }
+    #word {
+        font-size: 48px;
+        font-weight: bold;
+        margin: 40px 0;
+    }
+    #round-timer {
+        font-size: 36px;
+        font-weight: bold;
+        margin: 20px;
+        color: #333;
+    }
+    #round-timer.timeup {
+        color: red;
+    }
+    button {
+        padding: 14px 24px;
+        margin: 10px;
+        font-size: 20px;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        background-color: #007aff;
+        color: white;
+    }
+    button:disabled {
+        background-color: #cccccc;
+        color: #666;
+    }
+</style>
+</head>
+<body>
+
+<h1>2025 NCT X'mas Dinner Charades Game</h1>
+
+<div id="round-timer">2:00</div>
+<div id="word"></div>
+
+<button id="startRoundBtn" onclick="startRound()">Start 2-Minute Round</button>
+<button id="nextWordBtn" onclick="nextWord()" disabled>Next Word</button>
+<button id="shuffleBtn" onclick="shuffleWords()">Shuffle Vocabulary</button>
+
+<script>
+// --------------------------------------------------------------
+// HUGE VOCABULARY LIST (~150 mixed funny/action/movie/food/etc.)
+// --------------------------------------------------------------
+let vocabulary = [
+    // Actions
+    "Pretend working",
+    "Drink coffee",
+    "Open jar",
+    "Fall doing yoga",
+    "Run for train",
+    "Miss train",
+    "Take selfie",
+    "Debug code",
+    "Dance badly",
+    "Kick football",
+    "Lift weights",
+    "Eat noodles",
+    "Eat tacos",
+    "Eat ramen",
+    "Brew coffee",
+    "Climb stairs",
+    "Belly dance",
+    "Meditate quietly",
+    "Jump rope",
+    "Sing opera",
+
+    // Movies & TV
+    "Cast spell",
+    "Titanic pose",
+    "Matrix dodge",
+    "Shoot webs",
+    "Fight lightsaber",
+    "Spider jump",
+    "Drive batmobile",
+    "Superhero landing",
+    "Kung fu",
+    "Dinosaur roar",
+
+    // Sports
+    "Play tennis",
+    "Swim butterfly",
+    "Cycle fast",
+    "Do push-ups",
+    "Goal celebration",
+    "Ski downhill",
+    "Run marathon",
+    "Table tennis",
+
+    // Food
+    "Eat schnitzel",
+    "Cut pretzel",
+    "Drink mate",
+    "Slice sushi",
+    "Eat curry",
+    "Drink bubbletea",
+    "Peel banana",
+
+    // Germany
+    "Order beer",
+    "Drink Glühwein",
+    "Check Autobahn",
+    "Wait DeutscheBahn",
+    "Cross Ampel",
+    "Speak Bavarian",
+    "Oktoberfest cheers",
+
+    // Europe
+    "Bike Amsterdam",
+    "Pose Eiffel",
+    "Drink espresso",
+    "Eat gelato",
+    "Climb Alps",
+
+    // Asia
+    "Bollywood dance",
+    "Eat kimchi",
+    "Do tai chi",
+    "Drink chai",
+    "K-pop dance",
+
+    // India
+    "Eat biryani",
+    "Do namaste",
+    "Bollywood pose",
+
+    // South America
+    "Dance samba",
+    "Drink caipirinha",
+    "Play football",
+    "Dance tango",
+
+    // Academia
+    "Write paper",
+    "Answer reviewer",
+    "Present poster",
+    "Teach class",
+    "Grade exams",
+
+    // Deep learning
+    "Train model",
+    "Backprop gradient",
+    "Fix GPU",
+    "Plot UMAP",
+    "Run notebook",
+    "Debug tensor",
+    "Switch devices",
+
+    // Pop culture
+    "Hair flip",
+    "Air guitar",
+    "Hip shake",
+    "DJ mixing",
+    "Dance TikTok",
+
+    // Politics (light & safe)
+    "German bureaucracy",
+    "Election voting",
+    "Budget meeting",
+];
+
+
+// Active round vocabulary copy
+let remainingWords = [];   
+
+// TIMER — 2 minutes
+let roundTime = 120; 
+let roundInterval = null;
+
+// ---------------------------
+// MAIN ROUND TIMER
+// ---------------------------
+function startRound() {
+    roundTime = 120;
+    document.getElementById("round-timer").classList.remove("timeup");
+
+    remainingWords = [...vocabulary];  // fresh pool
+    updateRoundDisplay();
+
+    document.getElementById("nextWordBtn").disabled = false;
+
+    nextWord(); // first word
+
+    clearInterval(roundInterval);
+    roundInterval = setInterval(() => {
+        roundTime--;
+        updateRoundDisplay();
+
+        if (roundTime <= 0) endRound();
+    }, 1000);
+}
+
+function updateRoundDisplay() {
+    const min = Math.floor(roundTime / 60);
+    let sec = roundTime % 60;
+    if (sec < 10) sec = "0" + sec;
+    document.getElementById("round-timer").innerText = `${min}:${sec}`;
+}
+
+function endRound() {
+    clearInterval(roundInterval);
+    document.getElementById("round-timer").innerText = "TIME'S UP!";
+    document.getElementById("round-timer").classList.add("timeup");
+
+    document.getElementById("nextWordBtn").disabled = true;
+    document.getElementById("word").innerText = "";
+}
+
+// ---------------------------
+// WORD FUNCTIONS
+// ---------------------------
+function nextWord() {
+    if (remainingWords.length === 0) {
+        document.getElementById("word").innerText = "No words left!";
+        return;
+    }
+
+    const idx = Math.floor(Math.random() * remainingWords.length);
+    const selected = remainingWords[idx];
+
+    // Remove selected word so it never repeats
+    remainingWords.splice(idx, 1);
+
+    document.getElementById("word").innerText = selected;
+}
+
+// Shuffle full vocabulary
+function shuffleWords() {
+    for (let i = vocabulary.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [vocabulary[i], vocabulary[j]] = [vocabulary[j], vocabulary[i]];
+    }
+    alert("Vocabulary shuffled!");
+}
+</script>
+
+</body>
+</html>
